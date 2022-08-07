@@ -21,6 +21,9 @@ const camera = new THREE.PerspectiveCamera(
 const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
 
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+scene.add(directionalLight);
+
 const orbit = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(3);
@@ -51,7 +54,7 @@ const options = {
 const boxGeometry = new THREE.BoxGeometry();
 const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
-box.position.y = 10;
+box.position.set(2, 5, 10);
 scene.add(box);
 
 const planeGeometry = new THREE.PlaneGeometry(30, 30);
