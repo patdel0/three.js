@@ -18,6 +18,9 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 
+const ambientLight = new THREE.AmbientLight(0x333333);
+scene.add(ambientLight);
+
 const orbit = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(3);
@@ -29,14 +32,30 @@ scene.add(axesHelper);
 camera.position.set(-10, 30, 30);
 orbit.update();
 
+const options = {
+  // Sphere
+  sphereColor: "#ffea00",
+  sphereWireframe: false,
+  sphereWireframeSize: 50,
+  sphereSpeed: 0.01,
+
+  // Box
+  boxColor: "#00ff00",
+
+  // Plane
+  planeColor: "#ffffff",
+
+  ambientLightColor: "#333333",
+};
+
 const boxGeometry = new THREE.BoxGeometry();
-const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
 box.position.y = 10;
 scene.add(box);
 
 const planeGeometry = new THREE.PlaneGeometry(30, 30);
-const planeMaterial = new THREE.MeshBasicMaterial({
+const planeMaterial = new THREE.MeshStandardMaterial({
   color: 0xffffff,
   side: THREE.DoubleSide,
 });
@@ -44,8 +63,12 @@ const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
 scene.add(plane);
 
-const sphereGeometry = new THREE.SphereGeometry(4, 50, 50);
-const sphereMaterial = new THREE.MeshBasicMaterial({
+const sphereGeometry = new THREE.SphereGeometry(
+  4,
+  options.sphereWireframeSize,
+  options.sphereWireframeSize
+);
+const sphereMaterial = new THREE.MeshStandardMaterial({
   color: 0x0000ff,
   wireframe: false,
 });
@@ -54,13 +77,6 @@ sphere.position.y = 5;
 scene.add(sphere);
 
 const gui = new dat.GUI();
-
-const options = {
-  sphereColor: "#ffea00",
-  boxColor: "#00ff00",
-  planeColor: "#ffffff",
-  sphereWireframe: false,
-};
 
 const sphereFolder = gui.addFolder("sphere");
 sphereFolder
@@ -71,14 +87,25 @@ sphereFolder
   .add(options, "sphereWireframe")
   .onChange((e) => (sphere.material.wireframe = e));
 
+sphereFolder.add(options, "sphereSpeed", 0, 0.1);
+
 gui.addColor(options, "boxColor").onChange((e) => box.material.color.set(e));
 gui
   .addColor(options, "planeColor")
   .onChange((e) => plane.material.color.set(e));
 
+gui
+  .addColor(options, "ambientLightColor")
+  .onChange((e) => ambientLight.color.set(e));
+
+let step = 0;
+
 function animate(time) {
   box.rotation.x += 1 / time;
   box.rotation.y += 1 / time;
+
+  step += options.sphereSpeed;
+  sphere.position.y = 10 * Math.abs(Math.sin(step));
   renderer.render(scene, camera);
 }
 
