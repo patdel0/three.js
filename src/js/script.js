@@ -59,11 +59,17 @@ const options = {
   sphereColor: "#ffea00",
   boxColor: "#00ff00",
   planeColor: "#ffffff",
+  sphereWireframe: false,
 };
 
-gui
+const sphereFolder = gui.addFolder("sphere");
+sphereFolder
   .addColor(options, "sphereColor")
   .onChange((e) => sphere.material.color.set(e));
+
+sphereFolder
+  .add(options, "sphereWireframe")
+  .onChange((e) => (sphere.material.wireframe = e));
 
 gui.addColor(options, "boxColor").onChange((e) => box.material.color.set(e));
 gui

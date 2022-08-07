@@ -574,9 +574,12 @@ const gui = new _datGui.GUI();
 const options = {
     sphereColor: "#ffea00",
     boxColor: "#00ff00",
-    planeColor: "#ffffff"
+    planeColor: "#ffffff",
+    sphereWireframe: false
 };
-gui.addColor(options, "sphereColor").onChange((e)=>sphere.material.color.set(e));
+const sphereFolder = gui.addFolder("sphere");
+sphereFolder.addColor(options, "sphereColor").onChange((e)=>sphere.material.color.set(e));
+sphereFolder.add(options, "sphereWireframe").onChange((e)=>sphere.material.wireframe = e);
 gui.addColor(options, "boxColor").onChange((e)=>box.material.color.set(e));
 gui.addColor(options, "planeColor").onChange((e)=>plane.material.color.set(e));
 function animate(time) {
