@@ -11,7 +11,9 @@
   </head>
   <body>
     <script src="js/three.js"></script>
-    <script>
+    <script type="module">
+      import WebGL from "./js/WebGL.js";
+
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(
         75,
@@ -39,7 +41,15 @@
         cube.rotation.y += 0.01;
         renderer.render(scene, camera);
       }
-      animate();
+
+      // Check whether WebGL is available
+      if (WebGL.isWebGLAvailable()) {
+        // Initiate function or other initializations here
+        animate();
+      } else {
+        const warning = WebGL.getWebGLErrorMessage();
+        document.getElementById("container").appendChild(warning);
+      }
     </script>
   </body>
 </html>
