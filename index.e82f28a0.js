@@ -542,6 +542,8 @@ const scene = new _three.Scene();
 const camera = new _three.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 const ambientLight = new _three.AmbientLight(0x333333);
 scene.add(ambientLight);
+const directionalLight = new _three.DirectionalLight(0xffffff, 0.8);
+scene.add(directionalLight);
 const orbit = new (0, _orbitControlsJs.OrbitControls)(camera, renderer.domElement);
 const axesHelper = new _three.AxesHelper(3);
 scene.add(axesHelper);
@@ -566,7 +568,7 @@ const boxMaterial = new _three.MeshStandardMaterial({
     color: 0x00ff00
 });
 const box = new _three.Mesh(boxGeometry, boxMaterial);
-box.position.y = 10;
+box.position.set(2, 5, 10);
 scene.add(box);
 const planeGeometry = new _three.PlaneGeometry(30, 30);
 const planeMaterial = new _three.MeshStandardMaterial({
