@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "dat.gui": "^0.7.9",
     "three": "^0.143.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "parcel": "^2.7.0"
+  },
+  "scripts": {
+    "deploy": "gh-pages -d dist"
   }
 }
