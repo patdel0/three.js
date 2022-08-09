@@ -536,6 +536,7 @@ var _three = require("three");
 var _orbitControlsJs = require("three/examples/jsm/controls/OrbitControls.js");
 var _datGui = require("dat.gui");
 const renderer = new _three.WebGL1Renderer();
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.append(renderer.domElement);
 const scene = new _three.Scene();
@@ -544,9 +545,16 @@ const ambientLight = new _three.AmbientLight(0x333333);
 scene.add(ambientLight);
 const directionalLight = new _three.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
+directionalLight.position.set(-30, 50, 0);
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.top = 12;
+const directionalLightHelper = new _three.DirectionalLightHelper(directionalLight, 5);
+scene.add(directionalLightHelper);
+const directionalLightShadowHelper = new _three.CameraHelper(directionalLight.shadow.camera);
+scene.add(directionalLightShadowHelper);
 const orbit = new (0, _orbitControlsJs.OrbitControls)(camera, renderer.domElement);
-const axesHelper = new _three.AxesHelper(3);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(3);
+// scene.add(axesHelper);
 // const gridHelper = new THREE.GridHelper(30);
 // scene.add(gridHelper);
 camera.position.set(-10, 30, 30);
@@ -568,7 +576,8 @@ const boxMaterial = new _three.MeshStandardMaterial({
     color: 0x00ff00
 });
 const box = new _three.Mesh(boxGeometry, boxMaterial);
-box.position.set(2, 5, 10);
+box.position.set(-5, 2, -3);
+box.castShadow = true;
 scene.add(box);
 const planeGeometry = new _three.PlaneGeometry(30, 30);
 const planeMaterial = new _three.MeshStandardMaterial({
@@ -578,6 +587,7 @@ const planeMaterial = new _three.MeshStandardMaterial({
 const plane = new _three.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
 scene.add(plane);
+plane.receiveShadow = true;
 const sphereGeometry = new _three.SphereGeometry(4, options.sphereWireframeSize, options.sphereWireframeSize);
 const sphereMaterial = new _three.MeshStandardMaterial({
     color: 0x0000ff,
@@ -586,6 +596,7 @@ const sphereMaterial = new _three.MeshStandardMaterial({
 const sphere = new _three.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.y = 5;
 scene.add(sphere);
+sphere.castShadow = true;
 const gui = new _datGui.GUI();
 const sphereFolder = gui.addFolder("sphere");
 sphereFolder.addColor(options, "sphereColor").onChange((e)=>sphere.material.color.set(e));
