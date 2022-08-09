@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 
 const renderer = new THREE.WebGL1Renderer();
+renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -23,11 +24,25 @@ scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 scene.add(directionalLight);
+directionalLight.position.set(-30, 50, 0);
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.top = 12;
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(
+  directionalLight,
+  5
+);
+scene.add(directionalLightHelper);
+
+const directionalLightShadowHelper = new THREE.CameraHelper(
+  directionalLight.shadow.camera
+);
+scene.add(directionalLightShadowHelper);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 
-const axesHelper = new THREE.AxesHelper(3);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(3);
+// scene.add(axesHelper);
 
 // const gridHelper = new THREE.GridHelper(30);
 // scene.add(gridHelper);
@@ -54,7 +69,8 @@ const options = {
 const boxGeometry = new THREE.BoxGeometry();
 const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
-box.position.set(2, 5, 10);
+box.position.set(-5, 2, -3);
+box.castShadow = true;
 scene.add(box);
 
 const planeGeometry = new THREE.PlaneGeometry(30, 30);
@@ -65,6 +81,7 @@ const planeMaterial = new THREE.MeshStandardMaterial({
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
 scene.add(plane);
+plane.receiveShadow = true;
 
 const sphereGeometry = new THREE.SphereGeometry(
   4,
@@ -78,6 +95,7 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.y = 5;
 scene.add(sphere);
+sphere.castShadow = true;
 
 const gui = new dat.GUI();
 
