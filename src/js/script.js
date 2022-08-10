@@ -41,6 +41,7 @@ const options = {
   ambientLightColor: "#333333",
 
   // Spotlight
+  spotLightColor: "#FFFFFF",
   penumbra: 0.8,
   angle: 0.1,
   intensity: 1,
@@ -121,10 +122,13 @@ sphereFolder
   .onChange((e) => (sphere.material.wireframe = e));
 sphereFolder.add(options, "sphereSpeed", 0, 0.1);
 
-const spotlightFolder = gui.addFolder("spotlight");
-spotlightFolder.add(options, "penumbra");
-spotlightFolder.add(options, "intensity");
-spotlightFolder.add(options, "angle");
+const spotLightFolder = gui.addFolder("spotlight");
+spotLightFolder.add(options, "penumbra");
+spotLightFolder.add(options, "intensity");
+spotLightFolder.add(options, "angle");
+spotLightFolder
+  .addColor(options, "spotLightColor")
+  .onChange((e) => spotLight.color.set(e));
 
 gui.addColor(options, "boxColor").onChange((e) => box.material.color.set(e));
 gui
