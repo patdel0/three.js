@@ -51,11 +51,11 @@ const options = {
 const boxGeometry = new THREE.BoxGeometry();
 const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
-box.position.set(-5, 2, -3);
+box.position.set(-5, 2, -7);
 box.castShadow = true;
 scene.add(box);
 
-const planeGeometry = new THREE.PlaneGeometry(30, 30);
+const planeGeometry = new THREE.PlaneGeometry(50, 50);
 const planeMaterial = new THREE.MeshStandardMaterial({
   color: 0xffffff,
   side: THREE.DoubleSide,
@@ -106,8 +106,8 @@ spotLight.position.set(100, 100, 0);
 spotLight.castShadow = true;
 spotLight.angle = 0.15;
 
-const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(spotLight, spotLightHelper);
+// const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLight);
 
 /* GUI */
 const gui = new dat.GUI();
@@ -143,14 +143,12 @@ function animate(time) {
   box.rotation.y += 1 / time;
 
   step += options.sphereSpeed;
-  sphere.position.y = 10 * Math.abs(Math.sin(step));
-  sphere.geometry.parameters.widthSegments = options.sphereWireframeSize;
-  sphere.geometry.parameters.heightSegments = options.sphereWireframeSize;
+  sphere.position.y = 10 * Math.abs(Math.sin(step)) + 3;
 
   spotLight.angle = options.angle;
   spotLight.penumbra = options.penumbra;
   spotLight.intensity = options.intensity;
-  spotLightHelper.update();
+  // spotLightHelper.update();
 
   renderer.render(scene, camera);
 }
