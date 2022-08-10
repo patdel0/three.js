@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Scene } from "three";
+import { FogExp2, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 
@@ -109,6 +109,10 @@ spotLight.angle = 0.15;
 
 // const spotLightHelper = new THREE.SpotLightHelper(spotLight);
 scene.add(spotLight);
+
+// FOG //
+
+scene.fog = new THREE.FogExp2(0x333333, 0.01);
 
 /* GUI */
 const gui = new dat.GUI();
