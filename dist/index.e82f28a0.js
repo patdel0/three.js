@@ -541,22 +541,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.append(renderer.domElement);
 const scene = new _three.Scene();
 const camera = new _three.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-const ambientLight = new _three.AmbientLight(0x333333);
-scene.add(ambientLight);
-const directionalLight = new _three.DirectionalLight(0xffffff, 0.8);
-scene.add(directionalLight);
-directionalLight.position.set(-30, 50, 0);
-directionalLight.castShadow = true;
-directionalLight.shadow.camera.top = 12;
-const directionalLightHelper = new _three.DirectionalLightHelper(directionalLight, 5);
-scene.add(directionalLightHelper);
-const directionalLightShadowHelper = new _three.CameraHelper(directionalLight.shadow.camera);
-scene.add(directionalLightShadowHelper);
 const orbit = new (0, _orbitControlsJs.OrbitControls)(camera, renderer.domElement);
-// const axesHelper = new THREE.AxesHelper(3);
-// scene.add(axesHelper);
-// const gridHelper = new THREE.GridHelper(30);
-// scene.add(gridHelper);
 camera.position.set(-10, 30, 30);
 orbit.update();
 const options = {
@@ -569,8 +554,14 @@ const options = {
     boxColor: "#00ff00",
     // Plane
     planeColor: "#ffffff",
-    ambientLightColor: "#333333"
+    // Ambient Light
+    ambientLightColor: "#333333",
+    // Spotlight
+    penumbra: 0.8,
+    angle: 0.1,
+    intensity: 1
 };
+// OBJECTS //
 const boxGeometry = new _three.BoxGeometry();
 const boxMaterial = new _three.MeshStandardMaterial({
     color: 0x00ff00
@@ -597,20 +588,54 @@ const sphere = new _three.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.y = 5;
 scene.add(sphere);
 sphere.castShadow = true;
-const gui = new _datGui.GUI();
+// LIGHTING //
+// const ambientLight = new THREE.AmbientLight(0x333333);
+// scene.add(ambientLight);
+// const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+// scene.add(directionalLight);
+// directionalLight.position.set(-30, 50, 0);
+// directionalLight.castShadow = true;
+// directionalLight.shadow.camera.top = 12;
+// const directionalLightHelper = new THREE.DirectionalLightHelper(
+//   directionalLight,
+//   5
+// );
+// scene.add(directionalLightHelper);
+// const directionalLightShadowHelper = new THREE.CameraHelper(
+//   directionalLight.shadow.camera
+// );
+// scene.add(directionalLightShadowHelper);
+const spotLight = new _three.SpotLight(0xffffff);
+spotLight.position.set(100, 100, 0);
+spotLight.castShadow = true;
+spotLight.angle = 0.15;
+const spotLightHelper = new _three.SpotLightHelper(spotLight);
+scene.add(spotLight, spotLightHelper);
+/* GUI */ const gui = new _datGui.GUI();
 const sphereFolder = gui.addFolder("sphere");
 sphereFolder.addColor(options, "sphereColor").onChange((e)=>sphere.material.color.set(e));
 sphereFolder.add(options, "sphereWireframe").onChange((e)=>sphere.material.wireframe = e);
 sphereFolder.add(options, "sphereSpeed", 0, 0.1);
+const spotlightFolder = gui.addFolder("spotlight");
+spotlightFolder.add(options, "penumbra");
+spotlightFolder.add(options, "intensity");
+spotlightFolder.add(options, "angle");
 gui.addColor(options, "boxColor").onChange((e)=>box.material.color.set(e));
 gui.addColor(options, "planeColor").onChange((e)=>plane.material.color.set(e));
 gui.addColor(options, "ambientLightColor").onChange((e)=>ambientLight.color.set(e));
+// ANIMATION //
 let step = 0;
 function animate(time) {
     box.rotation.x += 1 / time;
     box.rotation.y += 1 / time;
     step += options.sphereSpeed;
     sphere.position.y = 10 * Math.abs(Math.sin(step));
+    sphere.geometry.parameters.widthSegments = options.sphereWireframeSize;
+    sphere.geometry.parameters.heightSegments = options.sphereWireframeSize;
+    spotLight.angle = options.angle;
+    spotLight.penumbra = options.penumbra;
+    spotLight.intensity = options.intensity;
+    spotLightHelper.update();
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(()=>animate(200));
