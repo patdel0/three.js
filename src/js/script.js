@@ -1,7 +1,9 @@
 import * as THREE from "three";
-import { FogExp2, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
+
+import nebula from "../images/photo-1462331940025-496dfbfc7564.avif";
+import stars from "../images/photo-1520034475321-cbe63696469a.avif";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.shadowMap.enabled = true;
@@ -43,9 +45,13 @@ const options = {
   // Spotlight
   spotLightColor: "#FFFFFF",
   penumbra: 0.8,
-  angle: 0.1,
+  angle: 0.2,
   intensity: 1,
 };
+
+// BACKGROUND //
+const textureLoader = new THREE.TextureLoader();
+// scene.background = textureLoader.load(nebula);
 
 // OBJECTS //
 
@@ -55,6 +61,16 @@ const box = new THREE.Mesh(boxGeometry, boxMaterial);
 box.position.set(-5, 2, -7);
 box.castShadow = true;
 scene.add(box);
+
+const nebulaBoxGeometry = new THREE.BoxGeometry(5, 5, 5);
+const nebulaBoxMaterial = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  map: textureLoader.load(nebula),
+});
+const nebulaBox = new THREE.Mesh(nebulaBoxGeometry, nebulaBoxMaterial);
+nebulaBox.position.set(10, 5, 10);
+nebulaBox.castShadow = true;
+scene.add(nebulaBox);
 
 const planeGeometry = new THREE.PlaneGeometry(50, 50);
 const planeMaterial = new THREE.MeshStandardMaterial({
@@ -149,6 +165,8 @@ let step = 0;
 function animate(time) {
   box.rotation.x += 1 / time;
   box.rotation.y += 1 / time;
+  nebulaBox.rotation.x += 1 / time;
+  nebulaBox.rotation.y += 1 / time;
 
   step += options.sphereSpeed;
   sphere.position.y = 10 * Math.abs(Math.sin(step)) + 3;
