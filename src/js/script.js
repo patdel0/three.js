@@ -22,6 +22,8 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.enableDamping = true;
+orbit.dampingFactor = 0.02
 
 camera.position.set(-10, 30, 30);
 orbit.update();
@@ -170,6 +172,7 @@ function animate(time) {
 
   step += options.sphereSpeed;
   sphere.position.y = 10 * Math.abs(Math.sin(step)) + 3;
+  orbit.update();
 
   spotLight.angle = options.angle;
   spotLight.penumbra = options.penumbra;
