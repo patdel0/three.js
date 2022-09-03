@@ -39,6 +39,7 @@ const scene = new THREE.Scene()
 // positionsArray[7] = 0
 // positionsArray[8] = 0
 
+
 // Object
 const count = 50
 const verticesInTriangle = 3
