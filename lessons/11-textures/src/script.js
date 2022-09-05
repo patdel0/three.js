@@ -3,13 +3,17 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 // Textures
-const image = new Image()
-const imageSource = '/textures/door/color.jpg'
-const texture = new THREE.Texture(image)
-image.onload = () => {
-  texture.needsUpdate = true
-}
-image.src = imageSource
+
+const textureLoader = new THREE.TextureLoader()
+const texture = textureLoader.load('/textures/door/color.jpg')
+
+// const image = new Image()
+// const imageSource = '/textures/door/color.jpg'
+// const texture = new THREE.Texture(image)
+// image.onload = () => {
+//   texture.needsUpdate = true
+// }
+// image.src = imageSource
 /**
  * Base
  */
